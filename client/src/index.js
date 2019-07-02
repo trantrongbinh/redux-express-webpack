@@ -1,8 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Hello from './components/Hello'
 
-ReactDOM.hydrate(
-  <Hello name={window.__INITIAL__DATA__.name} />,
-  document.getElementById('root')
+const App = () => (
+    <div>
+      	<h1>Hello world!!</h1>
+   	</div>
 )
+
+ReactDOM.render(<App />, document.getElementById('root'));

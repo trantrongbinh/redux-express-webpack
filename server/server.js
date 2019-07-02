@@ -10,7 +10,7 @@ const ejs = require('ejs');
 const app = express()
   , server = require('http').createServer(app)
   , io = require('socket.io').listen(server);
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 server.listen(port);
 
 // Return index.html for '/'
@@ -19,7 +19,7 @@ app.get('/', function (req, res) {
 });
 
 // Set path for views and static resources
-app.set('views', './client/public');
+app.set('views', path.join(__dirname, '../client/public/dist'));
 app.set('view engine', 'html');
 app.engine('html', ejs.renderFile);
-app.use('/static', express.static('./client/build'));
+app.use('/', express.static(path.join(__dirname, '../client/public/dist')));

@@ -1,68 +1,64 @@
-/**
- * Created by trantrongbinh on 30/06/2019.
- */
-
-// Define paths
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 const path = require('path');
-const PATHS = {
-    app: path.join(__dirname, 'client', 'src'),
-    build: path.join(__dirname, 'client', 'build')
-};
 
-// A tool to merge config object
-const merge = require('webpack-merge');
-
-// Configuration for plugins
-const plugins = require('./webpack.plugins');
-
-// Common configuration for production and dev
-const common = merge({
-        entry: {
-            index: path.join(PATHS.app, 'index.js'),
-        },
-        output: {
-            path: path.join(PATHS.build, 'js'),
-            filename: '[name].js',
-            chunkFilename: '[chunkhash].js'
-        },
-        resolve: {
-            root: [
-                PATHS.app
-            ],
-            alias: {
-                js: 'js',
-                css: 'less'
+module.exports = {
+    mode: 'development',
+    entry: path.join(__dirname, '/client/src/index.js'),
+    module: {
+        rules: [{
+                test: /\.(js|jsx)$/,
+                use: 'babel-loader'
             },
-            extensions: ['', '.js', '.jsx']
+            {
+                test: /\.css$/,
+                use: [
+                    // style-loader
+                    { loader: 'style-loader' },
+                    // css-loader
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true
+                        }
+                    },
+                    // sass-loader
+                    { loader: 'sass-loader' },
+                    // less-loader
+                    { loader: 'less-loader' }
+                ]
+            },
+            {
+                test: /\.html$/,
+                use: 'html-loader'
+            }
+        ]
+    },
+    optimization: {
+        runtimeChunk: 'single',
+        splitChunks: {
+            cacheGroups: {
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    enforce: true,
+                    chunks: 'all'
+                }
+            }
         }
     },
-    plugins.copy(),
-    plugins.extractCommon('common.js'),
-    plugins.less(),
-    plugins.babel()
-);
-
-var config = null;
-
-// Detect the branch where npm is running on
-switch (process.env.npm_lifecycle_event) {
-    case 'build':
-        config = merge(
-            common,
-            plugins.minify()
-        );
-        break;
-
-    case 'dev':
-    default:
-        config = merge(
-            common,
-            // Set source map for debug
-            {
-                devtool: 'source-map'
-            }
-        );
-        break;
-}
-
-module.exports = config;
+    plugins: [
+        new CleanWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, '/client/public/index.html'),
+            filename: 'index.html',
+            title: 'react-redux-expressjs-base'
+        })
+    ],
+    output: {
+        filename: 'bundle.js',
+        chunkFilename: '[name].[chunkhash].js',
+        path: path.join(__dirname, '/client/public/dist')
+    }
+};
