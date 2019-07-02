@@ -1,10 +1,17 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import 'antd/dist/antd.css';
+import 'ant-design-pro/dist/ant-design-pro.css';
 
-const App = () => (
-    <div>
-      	<h1>Hello world!!</h1>
-   	</div>
-)
+import configureStore from './store/configureStore';
+import App from './App';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const store = configureStore();
+
+render (
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.getElementById('root')
+);
