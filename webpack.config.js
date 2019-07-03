@@ -14,16 +14,16 @@ module.exports = {
                 use: 'babel-loader'
             },
             {
-                test: /\.(css|scss)$/,
+                test: /\.(css|scss|les)$/,
                 use: [
                     // style-loader
                     { loader: 'style-loader' }, // change to MiniCssExtractPlugin.loader to create a css module
                     // css-loader
                     {
                         loader: 'css-loader',
-                        options: {
-                            modules: true
-                        }
+                        // options: {
+                        //     modules: true // Enable CSS Modules
+                        // }
                     },
                     // sass-loader
                     { loader: 'sass-loader' },
@@ -38,14 +38,17 @@ module.exports = {
         ]
     },
     optimization: {
-        runtimeChunk: 'single',
+        runtimeChunk: true,
+        moduleIds: 'hashed',
         splitChunks: {
+            chunks: 'all',
+            minSize: 50000,
+            maxSize: 512000, // size in bytes
             cacheGroups: {
                 vendors: {
                     test: /[\\/]node_modules[\\/]/,
                     name: 'vendors',
-                    enforce: true,
-                    chunks: 'all'
+                    enforce: true
                 }
             }
         }
@@ -61,20 +64,13 @@ module.exports = {
         new OptimizeCssAssetsPlugin()
     ],
     output: {
-        filename: 'bundle.js',
-        chunkFilename: '[name].[chunkhash].js',
+        filename: '[name].[chunkhash].bundle.js',
+        chunkFilename: '[name].[chunkhash].chunk.js',
         path: path.join(__dirname, '/client/public/dist')
     },
     devServer: {
         contentBase: path.join(__dirname, '/client/public/dist'),
         watchContentBase: true,
-        proxy: [ // allows redirect of requests to webpack-dev-server to another destination
-            {
-                context: ['/api', '/auth'], // can have multiple
-                target: 'http://localhost:3000', // server and port to redirect to
-                secure: false,
-            },
-        ],
         compress: true,
         headers: {
             'author': 'TTB'
@@ -87,5 +83,8 @@ module.exports = {
         port: 1997,
         publicPath: 'http://localhost:1997/',
         hot: true
+    },
+    performance: {
+        hints: false
     },
 };
