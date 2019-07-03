@@ -1,5 +1,5 @@
 import Home from '../pages';
-import Register from '../components/users/Register';
+// import Register from '../components/users/Register';
 
 const routes = [
   {

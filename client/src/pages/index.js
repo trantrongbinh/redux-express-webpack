@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Layout, Menu, Breadcrumb } from 'antd';
 
-import styles from './home.css';
+import styles from './home.scss';
 
 const { Header, Content, Footer } = Layout;
 
