@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { Component } from 'react';
+import Routes from './routes';
 
-const Hello = (props) => (
-  <React.Fragment>
-    <h1>Hello, {props.name}!</h1>
-  </React.Fragment>
-)
+class App extends Component {
+    render() {
+        return (
+            <Routes />
+        );
+    }
+}
 
-export default Hello
+export default App;
